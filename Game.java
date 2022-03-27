@@ -20,6 +20,7 @@
  */
 import java.io.*;
 import java.util.*;
+import java.net.*;
 
 
 public class Game {
@@ -27,6 +28,9 @@ public class Game {
 	// player objects 
 	Player me;
 	Player you;
+	Socket cSocket;
+	PrintWriter outPutStream;
+	BufferedReader inPutStream;
 	
 	/**
 	* This constructor method initializes all the required parameters like player names, words to be guessed and image files 
@@ -39,11 +43,12 @@ public class Game {
 	*			   yourName				Stores the name of the second player
 	*			   myWords				Stores the word to be guessed by the second order
 	*			   myPictureFilename	Stores the image file which is to be revealed if player 2 guesses the correct letters
+	* 			   port 				Stores the port number
 	*
 	* @return      void
 	*
 	*/
-	Game(String myName, String yourWords, String yourPictureFilename, String yourName, String myWords, String myPictureFilename ) {
+	Game(String myName, String yourWords, String yourPictureFilename, String yourName, String myWords, String myPictureFilename, int port ) {
 
 		// that is, an exchange occurs
 		// your guess word and picture goes to my object
@@ -51,6 +56,20 @@ public class Game {
 
 		// my guess word and picture goes to you object
 		you = new Player(yourName, myWords,myPictureFilename, 2);
+
+		// Connecting to the server
+		System.out.println("Connecting to the server...");
+		try{
+			Socket cSocket = new Socket("127.0.0.1", port);
+
+			// writing to the server
+			outPutStream = new PrintWriter( cSocket.getOutputStream(), true);
+			// reading from the server
+			inPutStream = new BufferedReader( new InputStreamReader( cSocket.getInputStream()));
+		}
+		catch(IOException e){
+			System.out.println(e);
+		}
 	}
 
 	int winner = -1; // 0 if player 1 wins and 1 if player 2 wins
@@ -105,8 +124,10 @@ public class Game {
 			yourPictureFilename = args[5];
 		}
 
+		int port = Integer.parseInt(args[12]);
+
 		//instantiating object of class to begin the game
-		Game ob = new Game(myName, yourWords, yourPictureFilename, yourName, myWords, myPictureFilename);
+		Game ob = new Game(myName, yourWords, yourPictureFilename, yourName, myWords, myPictureFilename, port);
 		ob.init();
 
 		ob.runGame();
@@ -143,10 +164,16 @@ public class Game {
 	*/
 	void init() throws FileNotFoundException{
 		
-		me.initPicture();
-		you.initPicture();
+		me.initPicture(outPutStream, inPutStream);
+		you.initPicture(outPutStream, inPutStream);
 
-		
+		try {
+			inPutStream.close();
+			outPutStream.close();
+		} catch (Exception e )       {
+			System.out.println(e.toString());
+			System.exit(1);
+		}
 	}
 	/**
 	* This method is used to start the game  

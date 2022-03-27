@@ -22,6 +22,7 @@
 import java.util.Scanner;
 import java.util.Vector;
 import java.io.*;
+import java.net.*;
 
 public class Picture{
 
@@ -41,7 +42,7 @@ public class Picture{
 	int lettersRevealed = 0;
 	double percentRevealed = 0.0d;
 	int totalCharacters = 0;
-	
+
 	/**
 	* This constructor method initializes the required parameters for players 
 	* 
@@ -66,35 +67,47 @@ public class Picture{
 	/**
 	* This method creates the guessed and orignal image vector.
 	*
-	* @param       		   none 
+	* @param       		   outPutStream		PrintWriter object to write to the server
+	* 					   inPutStream		BufferedReader object to read from the server
 	*
 	* @return              void
 	*
 	*/
 	
-	
-	public void initImage() throws FileNotFoundException {
+	public void initImage(PrintWriter outPutStream, BufferedReader inPutStream) throws FileNotFoundException {
 
-		System.out.println(filepath);
+		// System.out.println(filepath);
 
-		File imagefile = new File(filepath);
-		Scanner sc = new Scanner(imagefile);
+		// writing the filename to the server
+		outPutStream.println(filepath);
 
-		do{
-			String line = sc.nextLine();
-			Vector<Character> temp = new Vector<Character>();
-			Vector<Character> guessedTemp = new Vector<Character>();
+		try{ 
 
-			for(int i = 0; i<line.length(); i++){
-				temp.add(line.charAt(i));
-				guessedTemp.add('.');
-				totalCharacters+=1;
+			while(true){
+
+				// reading from the server line by line 
+				String line = inPutStream.readLine();
+
+				if(line.equals("DONE"))
+					break;
+
+				Vector<Character> temp = new Vector<Character>();
+				Vector<Character> guessedTemp = new Vector<Character>();
+
+				for(int i = 0; i<line.length(); i++){
+					temp.add(line.charAt(i));
+					guessedTemp.add('.');
+					totalCharacters+=1;
+				}
+
+				image.add(temp);
+				guessedImage.add(guessedTemp);
 			}
-
-			image.add(temp);
-			guessedImage.add(guessedTemp);
-		}while(sc.hasNextLine());
-
+		}
+		catch(IOException e){
+			System.out.println(e);
+		}
+		
 	}
 
 	 /**

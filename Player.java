@@ -43,7 +43,7 @@ public class Player {
 	Player(String name, String words, String filename, int playerNumber) {
 		this.name = name;
 
-		picture = new Picture(words, filename);
+		picture = new Picture(words, filename);		//initializes the image for the player 
 
 		this.playerNumber = playerNumber;
 	}
@@ -54,14 +54,15 @@ public class Player {
 	/**
 	* This method initializes the guessed image vector and the original image vector.  
 	* 
-	* @param       		none
+	* @param       		outPutStream	PrintWriter object to write to the server
+	* 					inPutStream		BufferedReader object to read from the server
 	*
 	* @return           void	
 	*
 	*/
 
-	public void initPicture() throws FileNotFoundException{
-		picture.initImage();
+	public void initPicture(PrintWriter outPutStream, BufferedReader inPutStream) throws FileNotFoundException{
+		picture.initImage(outPutStream, inPutStream);
 	}
 	
 	/**
@@ -115,12 +116,12 @@ public class Player {
 		
 		// searching for the guessLetter
 		do{
-			index = this.picture.word.indexOf(guessLetter, startIndex);
+			index = this.picture.word.indexOf(guessLetter, startIndex); //if letter guessed is present in the word to be guessed
 			
 			// searching for the next occurance of the guessLetter if it has already been guessed
 			if(index!=-1){
 				if(this.picture.guessedWord.charAt(index)!='.'){
-					startIndex=index+1;
+					startIndex=index+1;	//updating the start index and searching from there 
 					index=-1;
 				}
 			}
@@ -164,7 +165,7 @@ public class Player {
 									
 									// revealing the pixel
 									temp.set(j, this.picture.image.get(i).get(j));
-									this.picture.guessedImage.set(i, temp);
+									this.picture.guessedImage.set(i, temp);		//basically setting the guessedImage pixels with image pixels
 									tempPercentRevealed+=1;
 
 									if(tempPercentRevealed==this.picture.percentRevealed)
