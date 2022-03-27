@@ -54,14 +54,15 @@ public class Player {
 	/**
 	* This method initializes the guessed image vector and the original image vector.  
 	* 
-	* @param       		none
+	* @param       		outPutStream	PrintWriter object to write to the server
+	* 					inPutStream		BufferedReader object to read from the server
 	*
 	* @return           void	
 	*
 	*/
 
-	public void initPicture() throws FileNotFoundException{
-		picture.initImage();
+	public void initPicture(PrintWriter outPutStream, BufferedReader inPutStream) throws FileNotFoundException{
+		picture.initImage(outPutStream, inPutStream);
 	}
 	
 	/**
