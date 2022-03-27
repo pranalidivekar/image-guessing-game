@@ -1,0 +1,3 @@
+java Game -you prisonmike.txt prisonmike -me dwight.txt dwight
+
+java Game -me sharvai -meWords sharvaiwords.txt -mePicture "prisonmike.txt" -you pranali -youWords pranaliwords.txt -youPicture dwight.txt

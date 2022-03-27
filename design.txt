@@ -1,0 +1,49 @@
+This is the design document
+
+There are a total of 3 classes in our solution:
+1. Game
+2. Picture
+3. Player
+
+The Player class:
+Player has the following attributes:
+1. String name: the name of the player
+2. Picture picture: the picture that this player will guess
+3. int playerNumber: the unique number of the player
+Player has the following methods:
+1. Player(): constructor that initializes the Player's attributes
+2. void initPicture(): this initializes the picture by calling the initImage() method of the Picture class
+3. void printPicture(): displays the picture on the screen by calling the printImage() method of the Picture class
+4. void getInput(): gets the character that the user inputs as a guess
+5. void playTurn(): this is the actual logic of a player guessing a character and the picture revealing itself
+
+The Picture class:
+Picture holds all the information about the word to be guessed along with the picture to reveal
+Picture has the following attributes:
+1. Vector<Vector<Character>> image: the image that will be revealed
+2. Vector<Vector<Character>> guessedImage: the part of the image that gets guessed
+3. String filepath: the file path of the image
+4. String word: the word to guess
+5. String guessedWord: the part of the word that has been guessed
+6. int lettersRevealed: the number of letters that have been revealed
+7. double percentRevealed: percent of the characters revealed
+8. int totalCharacters: total characters in the image
+Picture has the following methods():
+1. Picture(): constructor that initializes the Picture's attributed
+2. void initImage(): initializes image and guessedImage
+3. void printImage(): prints guessedImage
+
+The Game class:
+This is the driver program 
+Game has the following attributes:
+1. Player me: object for player 1
+2. Player you: object for player 2
+3. int winner: stores the player number that wins
+Game has the following methods:
+1. Game(): initializes the objects me and you
+2. String getWord(): Gets the word to be guessed from the input
+3. void init(): initalizes the Pictures
+4. void runGame(): has an infinite do-while loop that allows the players to play one by one
+
+How all the classes work together:
+The Game class creates two Player objects for the 2 players. Each Player object creates an object of the Picture class to store the picture which is guessed by that Player.
